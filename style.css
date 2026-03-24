@@ -1,0 +1,51 @@
+body {
+  font-family: Arial;
+  margin: 0;
+  background-color: #f4f4f4;
+}
+
+.container {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+#title {
+  color: darkblue;
+}
+
+nav ul {
+  display: flex;
+  list-style: none;
+  background: #333;
+  padding: 10px;
+}
+
+nav ul li {
+  margin-right: 15px;
+}
+
+nav ul li a {
+  color: white;
+  text-decoration: none;
+}
+
+nav ul li a:hover {
+  color: yellow;
+}
+
+section, table {
+  background: white;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+table th, table td {
+  border: 1px solid black;
+  padding: 8px;
+}

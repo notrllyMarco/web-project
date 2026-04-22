@@ -56,8 +56,7 @@
         <label><input type="radio" name="q3" value="wrong3"> Advanced Programming Interface</label>
         <div class="quiz-feedback" id="fb3"></div>
       </div>
-
-      <!-- Question 4: Multiple Choice -->
+<!-- Question 4 -->
       <div class="quiz-question">
         <h3>Question 4: Multiple Choice</h3>
         <p>Which technology allows web pages to update content without refreshing?</p>
@@ -67,8 +66,7 @@
         <label><input type="radio" name="q4" value="smtp"> SMTP</label>
         <div class="quiz-feedback" id="fb4"></div>
       </div>
-
-      <!-- Question 5: Multi-selection (Checkboxes) -->
+    <!-- Question 5 -->
       <div class="quiz-question">
         <h3>Question 5: Select all that apply</h3>
         <p>Which of these are JavaScript frontend frameworks/libraries? (Choose all that apply)</p>
@@ -80,14 +78,12 @@
         <div class="quiz-feedback" id="fb5"></div>
       </div>
 
-      <!-- Buttons -->
       <div class="quiz-buttons">
         <button type="button" id="submitBtn">Submit Quiz</button>
         <button type="button" id="resetBtn">Reset Quiz</button>
       </div>
     </form>
 
-    <!-- Results Area -->
     <div id="quizResults" style="display:none;">
       <h2>Quiz Results</h2>
       <div id="passFail"></div>
@@ -106,7 +102,6 @@
 </footer>
 
 <script>
-  // Correct answers
   const ANSWERS = {
     q1: "node.js",
     q2: "css",
@@ -115,18 +110,15 @@
     q5: ["react", "angular", "vue"]
   };
 
-  // Normalize answer (lowercase, trim)
   function normalizeAnswer(ans) {
     return ans.trim().toLowerCase();
   }
 
-  // Check fill-in-blank (accepts node.js, nodejs, node)
   function checkFillBlank(userAns) {
     let normalized = normalizeAnswer(userAns);
     return normalized === "node.js" || normalized === "nodejs" || normalized === "node js" || normalized === "node";
   }
 
-  // Display feedback for each question
   function showFeedback(questionId, isCorrect, userAnswer, correctAnswer) {
     let fbDiv = document.getElementById(questionId);
     if (isCorrect) {
@@ -140,13 +132,11 @@
     }
   }
 
-  // Submit quiz function
   function submitQuiz() {
     let total = 0;
     let maxScore = 5;
     let results = [];
 
-    // Q1: Fill in blank
     let q1Ans = document.getElementById('q1').value;
     let q1Correct = checkFillBlank(q1Ans);
     if (q1Correct) total++;
@@ -159,7 +149,6 @@
       pass: q1Correct
     });
 
-    // Q2: Multiple choice
     let q2Selected = document.querySelector('input[name="q2"]:checked');
     let q2Ans = q2Selected ? q2Selected.value : null;
     let q2Correct = (q2Ans === ANSWERS.q2);
@@ -173,7 +162,6 @@
       pass: q2Correct
     });
 
-    // Q3: Multiple choice
     let q3Selected = document.querySelector('input[name="q3"]:checked');
     let q3Ans = q3Selected ? q3Selected.value : null;
     let q3Correct = (q3Ans === ANSWERS.q3);
@@ -187,7 +175,6 @@
       pass: q3Correct
     });
 
-    // Q4: Multiple choice
     let q4Selected = document.querySelector('input[name="q4"]:checked');
     let q4Ans = q4Selected ? q4Selected.value : null;
     let q4Correct = (q4Ans === ANSWERS.q4);
@@ -201,7 +188,6 @@
       pass: q4Correct
     });
 
-    // Q5: Multi-select
     let q5Checked = document.querySelectorAll('input[name="q5"]:checked');
     let q5Answers = Array.from(q5Checked).map(cb => cb.value);
     let q5Correct = (q5Answers.length === ANSWERS.q5.length && ANSWERS.q5.every(ans => q5Answers.includes(ans)));
@@ -216,15 +202,12 @@
       pass: q5Correct
     });
 
-    // Calculate percentage and pass/fail
     let percentage = (total / maxScore) * 100;
     let passed = percentage >= 60;
 
-    // Show results section
     let resultsDiv = document.getElementById('quizResults');
     resultsDiv.style.display = "block";
 
-    // Pass/Fail with color
     let passFailDiv = document.getElementById('passFail');
     if (passed) {
       passFailDiv.innerHTML = '<div style="background:#c8e6c9; color:#1b5e20; padding:15px; border-radius:10px; text-align:center; font-weight:bold;">✓ PASSED! You scored ' + percentage + '%</div>';
@@ -232,11 +215,9 @@
       passFailDiv.innerHTML = '<div style="background:#ffcdd2; color:#b71c1c; padding:15px; border-radius:10px; text-align:center; font-weight:bold;">✗ FAILED. You scored ' + percentage + '%. Review and try again!</div>';
     }
 
-    // Total score
     let scoreDiv = document.getElementById('scoreDisplay');
     scoreDiv.innerHTML = '<div style="text-align:center; padding:15px; background:white; border-radius:10px; margin:15px 0;"><strong>Total Score:</strong> <span style="font-size:1.8em; color:#6a1b9a;">' + total + '</span> / ' + maxScore + ' (' + percentage.toFixed(1) + '%)</div>';
 
-    // Detailed results
     let detailedHtml = '<h3>Detailed Results</h3>';
     for (let i = 0; i < results.length; i++) {
       let r = results[i];
@@ -252,24 +233,18 @@
     }
     document.getElementById('detailedResults').innerHTML = detailedHtml;
 
-    // Scroll to results
     resultsDiv.scrollIntoView({ behavior: "smooth" });
   }
 
-  // Reset quiz function
   function resetQuiz() {
-    // Clear text input
     document.getElementById('q1').value = "";
     
-    // Clear radio buttons
     let radios = document.querySelectorAll('input[type="radio"]');
     radios.forEach(radio => radio.checked = false);
     
-    // Clear checkboxes
     let checkboxes = document.querySelectorAll('input[type="checkbox"]');
     checkboxes.forEach(cb => cb.checked = false);
     
-    // Clear all feedback
     for (let i = 1; i <= 5; i++) {
       let fb = document.getElementById('fb' + i);
       fb.innerHTML = "";
@@ -277,19 +252,15 @@
       fb.style.background = "";
     }
     
-    // Hide results
     document.getElementById('quizResults').style.display = "none";
     
-    // Clear results content
     document.getElementById('passFail').innerHTML = "";
     document.getElementById('scoreDisplay').innerHTML = "";
     document.getElementById('detailedResults').innerHTML = "";
     
-    // Scroll to top
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
-  // Event listeners
   document.getElementById('submitBtn').addEventListener('click', submitQuiz);
   document.getElementById('resetBtn').addEventListener('click', resetQuiz);
 </script>

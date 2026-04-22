@@ -22,12 +22,12 @@
 
 <main class="container">
   <div class="quiz-wrapper">
-    <h1>📝 Web Development Knowledge Quiz</h1>
+    <h1>Web Development Knowledge Quiz</h1>
     <p>Test your understanding of frontend and backend development concepts!</p>
 
-    <!-- Quiz Form -->
+    
     <form id="quizForm">
-      <!-- Question 1 fill in the blank -->
+      <!-- question 1 fill in the blank -->
       <div class="quiz-question">
         <h3>Question 1: Fill in the blank</h3>
         <p>_________ is a JavaScript runtime that allows developers to run JavaScript on the server side.</p>
@@ -35,7 +35,7 @@
         <div class="quiz-feedback" id="fb1"></div>
       </div>
 
-      <!-- Question 2 multiple choice -->
+      <!-- question 2 multiple choice -->
       <div class="quiz-question">
         <h3>Question 2: Multiple Choice</h3>
         <p>Which language is primarily used for styling web pages?</p>
@@ -46,7 +46,7 @@
         <div class="quiz-feedback" id="fb2"></div>
       </div>
 
-      <!-- Question 3 multiple choice -->
+      <!-- question 3 multiple choice -->
       <div class="quiz-question">
         <h3>Question 3: Multiple Choice</h3>
         <p>What does API stand for?</p>
@@ -68,7 +68,7 @@
         <div class="quiz-feedback" id="fb4"></div>
       </div>
 
-      <!-- Question 5  checkbox -->
+      <!-- question 5 checkbox -->
       <div class="quiz-question">
         <h3>Question 5: Select all that apply</h3>
         <p>Which of these are JavaScript frontend frameworks/libraries? (Choose all that apply)</p>
@@ -80,7 +80,7 @@
         <div class="quiz-feedback" id="fb5"></div>
       </div>
 
-      <!-- Buttons -->
+      <!-- buttons -->
       <div class="quiz-buttons">
         <button type="button" id="submitBtn">✅ Submit Quiz</button>
         <button type="button" id="resetBtn">🔄 Reset Quiz</button>
@@ -106,7 +106,6 @@
 </footer>
 
 <script>
-  // Correct answers
   const ANSWERS = {
     q1: "node.js",
     q2: "css",
@@ -115,18 +114,20 @@
     q5: ["react", "angular", "vue"]
   };
 
+  
   // fix answers
   function normalizeAnswer(ans) {
+    if (!ans) return "";
     return ans.trim().toLowerCase();
   }
 
-  // fill in the blank
+  // fill in blank
   function checkFillBlank(userAns) {
     let normalized = normalizeAnswer(userAns);
     return normalized === "node.js" || normalized === "nodejs" || normalized === "node js" || normalized === "node";
   }
 
-  // feedback
+  // feedback for questions
   function showFeedback(questionId, isCorrect, userAnswer, correctAnswer) {
     let fbDiv = document.getElementById(questionId);
     if (isCorrect) {
@@ -140,13 +141,22 @@
     }
   }
 
-  // submits
+  function escapeHtml(str) {
+    if (!str) return "";
+    return str.replace(/[&<>]/g, function(m) {
+      if (m === '&') return '&amp;';
+      if (m === '<') return '&lt;';
+      if (m === '>') return '&gt;';
+      return m;
+    });
+  }
+
   function submitQuiz() {
     let total = 0;
     let maxScore = 5;
     let results = [];
 
-    // Q1
+    // ----- q1 
     let q1Ans = document.getElementById('q1').value;
     let q1Correct = checkFillBlank(q1Ans);
     if (q1Correct) total++;
@@ -159,7 +169,7 @@
       pass: q1Correct
     });
 
-    // Q2
+    // q2
     let q2Selected = document.querySelector('input[name="q2"]:checked');
     let q2Ans = q2Selected ? q2Selected.value : null;
     let q2Correct = (q2Ans === ANSWERS.q2);
@@ -173,21 +183,26 @@
       pass: q2Correct
     });
 
-    // Q3
+    // q3
     let q3Selected = document.querySelector('input[name="q3"]:checked');
     let q3Ans = q3Selected ? q3Selected.value : null;
     let q3Correct = (q3Ans === ANSWERS.q3);
     if (q3Correct) total++;
-    showFeedback('fb3', q3Correct, q3Ans === "correct" ? "Application Programming Interface" : (q3Ans || "(not selected)"), "Application Programming Interface");
+    let q3DisplayAnswer = "(not selected)";
+    if (q3Ans === "correct") q3DisplayAnswer = "Application Programming Interface";
+    else if (q3Ans === "wrong1") q3DisplayAnswer = "Application Program Interface";
+    else if (q3Ans === "wrong2") q3DisplayAnswer = "Apple Programming Interface";
+    else if (q3Ans === "wrong3") q3DisplayAnswer = "Advanced Programming Interface";
+    showFeedback('fb3', q3Correct, q3DisplayAnswer, "Application Programming Interface");
     results.push({
       num: 3,
       type: "Multiple Choice",
-      user: q3Ans === "correct" ? "Application Programming Interface" : (q3Ans || "(not selected)"),
+      user: q3DisplayAnswer,
       correct: "Application Programming Interface",
       pass: q3Correct
     });
 
-    // Q4
+    // q4
     let q4Selected = document.querySelector('input[name="q4"]:checked');
     let q4Ans = q4Selected ? q4Selected.value : null;
     let q4Correct = (q4Ans === ANSWERS.q4);
@@ -201,7 +216,7 @@
       pass: q4Correct
     });
 
-    // Q5
+    // q5
     let q5Checked = document.querySelectorAll('input[name="q5"]:checked');
     let q5Answers = Array.from(q5Checked).map(cb => cb.value);
     let q5Correct = (q5Answers.length === ANSWERS.q5.length && ANSWERS.q5.every(ans => q5Answers.includes(ans)));
@@ -216,17 +231,78 @@
       pass: q5Correct
     });
 
-    // percentage
+    // caculate their score 
     let percentage = (total / maxScore) * 100;
     let passed = percentage >= 60;
 
-    // Show results
+    // show peoples results
     let resultsDiv = document.getElementById('quizResults');
     resultsDiv.style.display = "block";
 
-    // pass or fail
+    // a pass and fail color
     let passFailDiv = document.getElementById('passFail');
     if (passed) {
       passFailDiv.innerHTML = '<div style="background:#c8e6c9; color:#1b5e20; padding:15px; border-radius:10px; text-align:center; font-weight:bold;">✓ PASSED! You have a good understanding of web development. Score: ' + percentage.toFixed(1) + '%</div>';
     } else {
-      passFailDiv.innerHTML = '<div style="background:#ffcdd2; color:#b
+      passFailDiv.innerHTML = '<div style="background:#ffcdd2; color:#b71c1c; padding:15px; border-radius:10px; text-align:center; font-weight:bold;">✗ FAILED. Review the material and try again! Score: ' + percentage.toFixed(1) + '%</div>';
+    }
+
+    // show the total score
+    let scoreDiv = document.getElementById('scoreDisplay');
+    scoreDiv.innerHTML = '<div style="text-align:center; padding:15px; background:white; border-radius:10px; margin:15px 0;"><strong>Total Score:</strong> <span style="font-size:1.8em; color:#6a1b9a;">' + total + '</span> / ' + maxScore + ' (' + percentage.toFixed(1) + '%)</div>';
+
+    // show results 
+    let detailedHtml = '<h3>Results</h3>';
+    for (let i = 0; i < results.length; i++) {
+      let r = results[i];
+      let statusColor = r.pass ? "#4caf50" : "#f44336";
+      let statusText = r.pass ? "✓ Correct" : "✗ Incorrect";
+      detailedHtml += `
+        <div style="border-left:5px solid ${statusColor}; background:white; padding:12px; margin-bottom:12px; border-radius:8px;">
+          <strong>Question ${r.num} (${r.type}):</strong> <span style="color:${statusColor}">${statusText}</span><br>
+          <strong>Your answer:</strong> ${escapeHtml(r.user)}<br>
+          <strong>Correct answer:</strong> ${escapeHtml(r.correct)}
+        </div>
+      `;
+    }
+    document.getElementById('detailedResults').innerHTML = detailedHtml;
+
+    resultsDiv.scrollIntoView({ behavior: "smooth" });
+  }
+
+
+  function resetQuiz() {
+    document.getElementById('q1').value = "";
+    
+
+    let radios = document.querySelectorAll('input[type="radio"]');
+    radios.forEach(radio => radio.checked = false);
+    
+    let checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    checkboxes.forEach(cb => cb.checked = false);
+    
+    for (let i = 1; i <= 5; i++) {
+      let fb = document.getElementById('fb' + i);
+      fb.innerHTML = "";
+      fb.style.color = "";
+      fb.style.background = "";
+    }
+    
+    let resultsDiv = document.getElementById('quizResults');
+    resultsDiv.style.display = "none";
+    
+    document.getElementById('passFail').innerHTML = "";
+    document.getElementById('scoreDisplay').innerHTML = "";
+    document.getElementById('detailedResults').innerHTML = "";
+    
+    // go back up
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+
+  document.getElementById('submitBtn').addEventListener('click', submitQuiz);
+  document.getElementById('resetBtn').addEventListener('click', resetQuiz);
+</script>
+
+</body>
+</html>

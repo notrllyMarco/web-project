@@ -16,6 +16,15 @@ body {
   font-size: 2.5em;
 }
 
+/* Responsive image  */
+.responsive-img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 15px;
+  display: block;
+  margin: 0 auto;
+}
+
 nav ul {
   display: flex;
   justify-content: center;
@@ -49,6 +58,7 @@ nav ul li a:hover {
   box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
 }
 
+/* table styling */
 table {
   width: 100%;
   border-collapse: collapse;
@@ -85,6 +95,7 @@ a:hover {
   color: #ab47bc;
 }
 
+/* Quiz Stylings */
 .quiz-wrapper {
   background: white;
   padding: 20px;
@@ -170,4 +181,140 @@ a:hover {
 .quiz-buttons button:last-child:hover {
   background: #455a64;
   transform: scale(1.05);
+}
+
+
+/* 768 and < */
+@media screen and (max-width: 768px) {
+  /*  vert stack mobile */
+  nav ul {
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+  }
+  
+  nav ul li {
+    margin: 8px 0;
+    width: 100%;
+    text-align: center;
+  }
+  
+  nav ul li a {
+    display: block;
+    padding: 12px;
+  }
+  
+  .container {
+    padding: 12px;
+  }
+  
+  /* horizontal   */
+  table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  #title {
+    font-size: 1.8em;
+    text-align: center;
+  }
+  
+  h1 {
+    font-size: 1.6em;
+  }
+  
+  h2 {
+    font-size: 1.3em;
+  }
+  
+  /* quiz on movile */
+  .quiz-input {
+    width: 95%;
+    font-size: 14px;
+  }
+  
+  /* vert buttons */
+  .quiz-buttons {
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .quiz-buttons button {
+    width: 80%;
+    padding: 12px;
+  }
+  
+  /* spacing adjustment */
+  .container > * {
+    padding: 15px;
+    margin: 10px 0;
+  }
+  
+  /* list touch friendly */
+  ul li, .quiz-question label {
+    padding: 4px 0;
+  }
+}
+
+/* 480 and below */
+@media screen and (max-width: 480px) {
+  body {
+    font-size: 14px;
+  }
+  
+  #title {
+    font-size: 1.5em;
+  }
+  
+  h1 {
+    font-size: 1.4em;
+  }
+  
+  .container {
+    padding: 8px;
+  }
+  
+  .container > * {
+    padding: 12px;
+    border-radius: 10px;
+  }
+  
+  /* smal table text */
+  table th, table td {
+    padding: 6px;
+    font-size: 12px;
+  }
+  
+  /* quiz padding */
+  .quiz-question {
+    padding: 12px;
+  }
+  
+  .quiz-question h3 {
+    font-size: 1.1em;
+  }
+  
+  /* bigger touch input */
+  .quiz-input {
+    padding: 12px;
+    font-size: 14px;
+  }
+  
+  .quiz-question label {
+    padding: 8px 0;
+    font-size: 14px;
+  }
+  
+  /* Footer changes */
+  footer {
+    font-size: 12px;
+    padding: 12px;
+  }
+  
+  #quizResults div {
+    font-size: 13px;
+  }
 }
